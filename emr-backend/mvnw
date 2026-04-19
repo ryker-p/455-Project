@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+set -eu
+
+# Lightweight Maven wrapper (no system Maven required).
+# Downloads Maven into .mvn/ on first run, then executes it.
+
+MAVEN_VERSION="3.9.9"
+BASE_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+MAVEN_DIR="$BASE_DIR/.mvn/apache-maven-$MAVEN_VERSION"
+MAVEN_BIN="$MAVEN_DIR/bin/mvn"
+MAVEN_TGZ="$BASE_DIR/.mvn/apache-maven-$MAVEN_VERSION-bin.tar.gz"
+MAVEN_URL="https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz"
+MAVEN_REPO="$BASE_DIR/.mvn/repository"
+
+if [ ! -x "$MAVEN_BIN" ]; then
+  echo "Maven not found. Bootstrapping Maven $MAVEN_VERSION into .mvn/ ..."
+  mkdir -p "$BASE_DIR/.mvn"
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$MAVEN_URL" -o "$MAVEN_TGZ"
+  else
+    wget -q "$MAVEN_URL" -O "$MAVEN_TGZ"
+  fi
+  tar -xzf "$MAVEN_TGZ" -C "$BASE_DIR/.mvn"
+  rm -f "$MAVEN_TGZ"
+fi
+
+mkdir -p "$MAVEN_REPO"
+exec "$MAVEN_BIN" "-Dmaven.repo.local=$MAVEN_REPO" "$@"

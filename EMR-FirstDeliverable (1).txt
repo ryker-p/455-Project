@@ -1,0 +1,900 @@
+
+
+--- PAGE 1 ---
+   
+ 
+   
+ 
+ 
+REQUIREMENT DEFINITION 
+AND SPECIFICATION FOR THE 
+ELECTRONIC MEDICAL 
+RECORD (EMR) SYSTEM 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+FEBRUARY 24, 2026 
+VERSION: 1.0 
+Brady Helbling, Alex Wetzstein, Ryker Pederson, Drew Knuth 
+
+
+--- PAGE 2 ---
+   
+ 
+  1 
+ 
+Table of Contents  
+Table of Contents ................................ ................................ ................................ ......... 1 
+Brief Background and Project Description ................................ ................................ ......... 2 
+Background ................................ ................................ ................................ ............... 2 
+Project Objectives ................................ ................................ ................................ ....... 2 
+Scope ................................ ................................ ................................ .......................  2 
+Requirements Definition ................................ ................................ ................................ . 3 
+Functional Requirements ................................ ................................ .............................  3 
+Non-Functional Requirements ................................ ................................ ......................  6 
+Requirements Specification ................................ ................................ ..........................  7 
+Use-Case Diagram ................................ ................................ ................................ .... 12 
+Use-Case Scenarios ................................ ................................ ................................ .. 13 
+Graphical User Interface (GUI) Requirements ................................ ...............................  14 
+System Requirements ................................ ................................ ................................  20 
+Conceptual Design ................................ ................................ ................................ ..... 22 
+Entity-Relationship Diagram (ERD)................................ ................................ ............ 22 
+Appendix ................................ ................................ ................................ ...................  24 
+References ................................ ................................ ................................ ................ 26 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+--- PAGE 3 ---
+   
+ 
+  2 
+ 
+ 
+Brief Background and Project Description 
+Background 
+• Electronic Medical Record Keeping Systems (EMRKS) are designed to replace 
+traditional paper charts with a faster, more accurate digital system. They help healthcare 
+staff store and access patient information without dealing with handwritten notes, 
+misplaced files, or slow manual processes. 
+• These systems store all important patient information in one place, including medical 
+history, prescriptions, lab results, diagnosis, and vaccinations.  
+• Moving to a digital system also supports better decision‑making, since features like 
+allergy alerts, test result warnings, and organized patient histories make it easier for 
+providers to deliver safe, consistent care. Therefore, the shift to electronic records is 
+essential for modern healthcare because it improves workflow, reduces errors, and gives 
+both patients and providers quicker access to the information they need. 
+Project Objectives 
+• Provide secure, structured storage of patient medical records.  
+o The system must maintain accurate, organized, and easily retrievable patient 
+information. 
+• Support multi‑user access with role‑based permissions.  
+o Doctors, nurses, administrators, and patients each require different access levels. 
+• Improve clinical workflows through automation and fast data retrieval.  
+o Features such as automated logging, quick search, and structured forms reduce 
+manual work. 
+• Ensure compliance with healthcare data protection standards (e.g., HIPAA). 
+o Sensitive medical information must be protected through encryption, 
+authentication, and access control. 
+• Enable seamless sharing of medical information among authorized professionals. 
+o Providers should be able to access and share patient records securely to support 
+coordinated care. 
+ 
+ 
+Scope 
+The scope of this project includes the core functionalities required to support a modern 
+Electronic Medical Record (EMR) system. Specifically, the system will provide patient 
+
+
+--- PAGE 4 ---
+   
+ 
+  3 
+ 
+registration through kiosks, web, and mobile platforms; secure storage and retrieval of medical 
+records; appointment scheduling between patients and healthcare providers; prescription 
+management for clinical staff; and reporting capabilities for both patients and administrative 
+personnel. The system will also support secure access and authentication mechanisms, including 
+role‑based permissions and optional two‑factor authentication. In addition, the EMR will display 
+basic billing information and insurance details to help patients manage their financial and 
+coverage‑related data. However, the scope of this project does not extend to full financial 
+accounting systems, advanced insurance adjudication beyond basic reporting, or external 
+pharmacy inventory management. These exclusions ensure that the project remains focused on 
+core EMR functionality while avoiding features that fall outside the intended scope of this 
+deliverable. 
+Requirements Definition 
+Functional Requirements 
+Core functionalities: 
+1. Patient registration and profile management 
+The EMR system must support a complete patient registration workflow that allows new 
+patients to create their accounts through kiosks, web browsers, or mobile devices. During 
+registration, patients provide essential information such as their username, password, and 
+personal details while the system automatically assigns the “Patient” role to ensure proper 
+access control. The system must validate the uniqueness of usernames, enforce password 
+complexity rules, and securely store all credentials using encryption. Once registered, 
+patients can log in and manage their profile information, including updating their address, 
+phone number, and email. However, SSN, date of birth, and PatientID must remain non-
+editable to main data integrity. All updates made by the patient must be reflected in the 
+Patient and Account_Information entities, ensuring that the system maintains accurate 
+and current demographic data. 
+ 
+2. Appointment scheduling and management 
+The EMR system must support a comprehensive appointment scheduling workflow that 
+allows patients to request appointments and doctors to manage them. Patients can select 
+available dates and times, specify the reason for the visit, and submit appointment 
+requests through the system. Doctors may approve, reschedule, or cancel appointments 
+based on their availability. Appointment details including date, time, doctor, patient and 
+reason are stored in the Appointment entity. This functionality ensures efficient 
+scheduling, and provides patients with a clear overview of their upcoming and past 
+appointments. 
+ 
+
+
+--- PAGE 5 ---
+   
+ 
+  4 
+ 
+ 
+ 
+ 
+3. Secure sharing of records between authorized users 
+Authorized medical professionals must be able to securely share patient records with 
+other providers when necessary for coordinated care. The system must ensure that only 
+users with appropriate permissions can initiate or receive shared records. All sharing 
+events must be logged in the Access_Log entity to ensure time stamps if something were 
+to happen with an unauthorized user. Therefore, this functionality supports collaborative 
+care while maintaining strict security and privacy standards. 
+ 
+4. Reporting and analytics on patient data 
+The EMR system must generate a variety of reports for patients. This can include patients 
+being able to access reports summarizing their medical history, prescriptions, 
+appointments, and billing information. 
+ 
+5. Record creation, modification, and retrieval 
+The EMR system must support complete lifecycle management of all patient-related 
+records, including their creation, modification, and retrieval. When authorized users such 
+as doctors, nurses, or administrators create new records, the system must validate the 
+input, assign the appropriate identifiers, and store the information in the corresponding 
+entity within the database. Modification of existing records must be restricted based on 
+user roles to ensure data integrity. For example, only medical staff may update diagnoses 
+or treatment details, while patients may update only their demographic information. 
+Every modification must be timestamped and associated with the user who performed the 
+change to maintain accountability. Retrieval must be efficient and role-aware, allowing 
+users to quickly access the records they are authorized to view. This functionality ensures 
+that the EMR system maintains accurate, up to date information. 
+ 
+6. User Authentication 
+The system must provide a secure and reliable authentication process for all user roles, 
+including Patients, Doctors, Nurses, and Administrators. Users log in by entering their 
+username and password, which the system verifies against encrypted records stored in the 
+User entity. If two‑factor authentication (2FA) is enabled for a user, the system must 
+request an additional verification step before granting access. Upon successful 
+authentication, the system must generate a new entry in the Acces_Log entity to record 
+the login event, including the UserID, and action type. Failed login attempts must also be 
+logged to support security monitoring. This authentication process ensures that only 
+authorized individuals gain access to sensitive medical information. 
+ 
+
+
+--- PAGE 6 ---
+   
+ 
+  5 
+ 
+ 
+ 
+ 
+ 
+7. Role-Based Access Control 
+The EMR system must enforce strict role‑based access control to ensure that users only 
+access information appropriate to their responsibilities. Patients may view only their own 
+medical records, prescriptions, appointments, and billing information. Doctors and 
+Nurses must be able to access patient records relevant to their care duties, including 
+medical history, prescriptions, and test results. Administrators must have elevated 
+privileges that allow them to manage user accounts, system configurations, and 
+high‑level reporting features. The system must block any unauthorized access attempts 
+and record them in the Access_Log entity. This role-based access control model ensures 
+compliance with healthcare privacy regulations and protects sensitive patient data from 
+improper access. 
+ 
+8. Medical History Management 
+The system must allow authorized healthcare staff to view and update patient medical 
+histories. Medical history includes diagnoses, past conditions, allergies, and treatments, 
+all stored within the Medical_History entity. Doctors and Nurses may update medical 
+history depending on their assigned permissions, while patients may only view their 
+history without making modifications. Updates to medical history must be associated 
+with the user who performed the change to maintain accountability. This functionality 
+ensures that medical records remain accurate, complete, and reflective of the patient’s 
+current health status. 
+ 
+9. Test Result Management 
+The system must allow authorized staff to upload, update, and manage patient test results. 
+Test results include the test name, result value, and date completed which are all stored in 
+the Test_Result entity. Patients must be able to view their test results once they are 
+released by the provider. This functionality ensures that patients receive timely updates 
+about their health and that providers have access to accurate diagnostic information. 
+ 
+10. Billing and Insurance Information 
+The EMR system must allow patients to view their billing statements and insurance 
+information. Billing records include the amount, date, and payment status, stored in the 
+Billing entity. Insurance information (including provider name, policy number, and 
+coverage details) is stored in the Insurance entity and linked to the patient. Patients must 
+be able to review outstanding balances, past payments, and insurance claims through the 
+
+
+--- PAGE 7 ---
+   
+ 
+  6 
+ 
+system. This functionality improves transparency and helps patients manage their 
+financial responsibilities. 
+ 
+Non-Functional Requirements 
+• Performance:  
+The EMR system must deliver consistent and responsive performance to support the fast 
+paced environment of clinical operations. This is because healthcare staff often access 
+patient records during time‑sensitive situations, the system must process database queries, 
+page loads, and record retrievals with minimal delay. Under normal operating conditions, 
+the system should return results within clinically acceptable timeframes. It must also 
+support concurrent access by multiple users including doctors, nurses, administrators, and 
+patients without degradation in performance. Overall, the system must handle concurrent 
+users without lag. 
+ 
+•  Security:  
+Security is a foundational requirement of the EMR system due to the sensitive nature of 
+medical information. All data stored within the system must be encrypted both at rest and 
+in transit to prevent unauthorized access or interception. User passwords must be hashed 
+using industry‑standard algorithms, and two‑factor authentication must be available for 
+all user roles to provide an additional layer of protection. The system must enforce strict 
+access control policies based on user roles, ensuring that users can only view or modify 
+information appropriate to their responsibilities. Unauthorized access attempts must be 
+blocked and recorded in the Access_Log entity. Additionally, the system must maintain 
+detailed audit trails of all user actions to support compliance with healthcare regulations 
+such as HIPAA. These security measures ensure that patient data remains confidential, 
+protected, and accessible only to authorized individuals. Overall, data must be encrypted 
+and accessible only to authorized users. 
+ 
+• Scalability:  
+The EMR system must be designed with scalability in mind to accommodate the 
+long‑term growth of patient records, user accounts, and stored medical data. As 
+healthcare organizations expand, the system must be capable of handling increasing 
+volumes of appointments, prescriptions, test results, and access logs without requiring 
+major architectural changes. The database design should support horizontal or vertical 
+scaling, allowing additional storage or processing power to be added as needed. The 
+system architecture must also allow for future integration with external systems, such as 
+laboratory information systems or insurance verification services. This ensures that the 
+EMR system remains adaptable and capable of supporting evolving clinical and 
+
+
+--- PAGE 8 ---
+   
+ 
+  7 
+ 
+administrative needs. In all, the system must accommodate growing patient records and 
+users. 
+ 
+ 
+ 
+•  Usability:  
+It is essential for ensuring that both healthcare staff and patients can interact with the 
+EMR system efficiently and without confusion. The system must provide intuitive, 
+well‑organized interfaces that allow users to navigate easily between dashboards, patient 
+profiles, appointments, and medical records. Forms must be clearly labeled, logically 
+structured, and designed to minimize data entry errors. The system should also support 
+accessibility standards to accommodate users with disabilities, ensuring that all 
+individuals can interact with the system effectively. By prioritizing usability, the EMR 
+system reduces training time, minimizes user frustration, and supports smooth clinical 
+workflows. In all, there needs to be intuitive interfaces for both healthcare providers and 
+administrative staff. 
+ 
+• Compliance:  
+The EMR system must comply with all relevant healthcare regulations, including HIPAA 
+and other regional data protection laws. Compliance requires strict control over who can 
+access patient information, how data is stored, and how long audit logs are retained. The 
+system must enforce the minimum‑necessary access principle, ensuring that users only 
+access the information required for their role. Audit logs must be preserved for legally 
+mandated durations and must accurately record all access and modification events. By 
+adhering to these compliance requirements, the EMR system protects patient privacy, 
+reduces legal risk, and ensures that the organization meets industry standards for data 
+protection. 
+ 
+Requirements Specification 
+These specifications will define the systems behavior for the user role along with constraints 
+and interactions. The system is designed based on the ERD provided (See Figure 5.1) which 
+consist of the core entities: 
+o User 
+o Patient 
+o Doctor 
+o Nurse 
+o Admin 
+o Account_Info 
+
+
+--- PAGE 9 ---
+   
+ 
+  8 
+ 
+o Medical_History 
+o Perscription 
+o Test_Result 
+o Appointment 
+o Billing 
+o Insurance 
+o Access_Log 
+The system goes by a role-based access control model where an authenticated user’s role 
+grants them only those system capabilities 
+ 
+User Authentication and Account Management 
+The EMR system must allow patients to create accounts through kiosk, web, or mobile 
+interfaces. During registration, the patient provides a username and password, while the 
+system automatically assigns the “Patient” role and initializes the Two‑Factor 
+Authentication (2FA) setting to false. The system validates that the username is unique 
+and that the password meets security requirements before storing the encrypted 
+credentials in the User table. 
+Once registered, users authenticate by entering their username and password. The system 
+verifies the credentials, checks whether 2FA is enabled, and if necessary, prompts for 
+additional verification. Upon successful login, the system creates a new entry in the 
+Access_Log entity to record the event.  
+Security requirements include encrypted password comparison, session timeout after 
+inactivity, and temporary account lockout after repeated failed login attempts. 
+ 
+Patient Role Specifications 
+Patients have access to a limited but essential set of system functions. They may view 
+their profile information, including name, date of birth, masked SSN, address, phone 
+number, insurance ID, and sex. This information is retrieved from the Patient entity. 
+Patients may update only their address and phone number; sensitive fields such as SSN, 
+PatientID, and InsuranceID are locked to preserve data integrity. Patients may also view 
+their medical history, including past conditions, diagnoses, treatments, and allergies, 
+which the system retrieves from the Medical_History entity. All access to medical records 
+is logged in the Access_Log table. 
+Patients may schedule appointments by selecting a doctor, date, time, and reason for the 
+visit. The system validates that the selected time is in the future and that the doctor is not 
+
+
+--- PAGE 10 ---
+   
+ 
+  9 
+ 
+double‑booked before inserting the appointment into the Appointment entity. Patients 
+may also view their prescriptions, test results, and billing information. Prescription data 
+includes medication name, dosage, frequency, and duration, while test results include the 
+completion date and result details. Billing information includes claim ID, amount, and 
+payment status. All of these are retrieved through queries to their respective entities. 
+ 
+Doctor Role Specifications 
+Doctors have broader access privileges due to their clinical responsibilities. They may 
+view patient demographic information, medical history, prescriptions, and test results. 
+These different types of data are retrieved through joined queries across the Patient, 
+Medical_History, Prescription, and Test_Result entities.  
+ 
+Doctors may also create or update medical history entries, including diagnoses, 
+treatments, past conditions, and allergies. These updates are written to the 
+Medical_History entity and timestamped to maintain accurate clinical records. 
+ 
+Doctors may prescribe medications by entering the medication name, dosage, frequency, 
+and duration. The system validates that the referenced PatientID exists before inserting 
+the prescription into the Prescription entity.  
+ 
+Doctors may also manage their appointments by viewing their schedule and updating 
+appointment statuses. These interactions ensure that doctors can efficiently manage 
+patient care while maintaining accurate and secure records. 
+ 
+Nurse Role Specifications 
+Nurses have access to patient medical records similar to doctors but with more limited 
+modification privileges. They may view medical history, prescriptions, and test results 
+but cannot modify diagnoses unless explicitly authorized. Nurses may update minor 
+medical notes or confirm test completion, with updates written to the Test_Result entity. 
+These updates ensure that clinical workflows remain accurate and up to date while 
+maintaining appropriate role boundaries. 
+ 
+Administrator Role Specifications 
+Administrators manage system‑level operations and have the broadest access privileges. 
+They may create new patient records, insert account information, and associate insurance 
+details. These operations involve inserting data into the Patient, Account_Info, and 
+
+
+--- PAGE 11 ---
+   
+ 
+  10 
+ 
+Insurance entities. Administrators also manage user accounts by creating doctor and nurse 
+accounts, enabling or disabling 2FA, and resetting passwords. They may review system 
+access logs by querying the Access_Log entity to audit user activity and identify 
+suspicious behavior. Administrators also manage billing operations by inserting new 
+billing records or updating billing statuses in the Billing entity. 
+ 
+ 
+System-Level Database Integrity Constraints 
+ 
+Primary Keys 
+The primary consists of: PatientID, DoctorID, NurseID, AdminID, AppointmentID, 
+PrescriptionID, BillingID, ResultID. 
+ 
+Foreign Keys 
+• Appointment.DoctorID → DOCTOR.DoctorID 
+• Prescription.PatientID → PATIENT.PatientID 
+• Billing.PatientID → PATIENT.PatientID 
+• Access_Log.UserID → USER.UserID 
+ 
+Referential Integrity 
+• Cannot delete Patient if related records exist. 
+• Cannot insert Appointment with invalid DoctorID. 
+ 
+Security and Compliance Specifications 
+• Role-based access control (RBAC) 
+• Passwords are encrypted 
+• Data handling is HIPPA compliant 
+• There is audit logging for all record access 
+• SSN masked in UI 
+• Support for 2FA 
+• Automatic logout after inactivity 
+ 
+
+
+--- PAGE 12 ---
+   
+ 
+  11 
+ 
+Reporting and Analytics 
+System shall generate: 
+• Appointment reports per doctor 
+• Billing status reports 
+• Access log audit reports 
+ 
+Error Handling Specifications 
+System shall handle errors such as: 
+• Invalid login gives an error message 
+• Duplicate appointment gives a rejection 
+• Null required fields gives a validation error 
+• Unauthorized access gives an access denied page 
+ 
+ 
+ 
+
+
+--- PAGE 13 ---
+   
+ 
+  12 
+ 
+Use-Case Diagram 
+Figure 4.4 Use Case Diagram of the EMR System 
+Figure 4.4 displays the Use-Case Diagram which provides a high-level representation of the uses 
+for the Electronic Medical Record System by showing the relationships between actors and the 
+system. 
+The Use-Case Diagram for the EMR system shows the major interactions between the system 
+actors and the systems functionalities. The diagram includes 5 different actors, patient, doctor, 
+nurse, admin, and authentication system, which all are users or factors that interact with the EMR 
+system. The diagram also captures the essential functions that are involved in the medical 
+process, administrative process, and system security. 
+
+
+
+--- PAGE 14 ---
+   
+ 
+  13 
+ 
+Patients can register for an account, login with two factor authentication, view and update their 
+personal information, access their medical history, view prescriptions, book appointments, and 
+view billing information. Doctors are able to interact with the system by accessing patient 
+records, updating patient diagnosis and treatments, create prescriptions, order lab tests, and 
+manage appointments. Nurses are able to support the workflow by updating vitals, adding 
+treatment notes, assisting with test orders, and updating medications. Administrators manage the 
+user accounts, billing records, insurance information, access logs, and system roles and 
+permissions. The authentication system supports secure login and identity verification for all 
+users where two factor authentication is enabled. 
+Each use case represents a functional requirement of the EMR system and defines how actors 
+participate in the system. The relationships between actors and use cases illustrate the 
+responsibilities, permissions, and access of each role. This ensures that the system stays safe, 
+efficient, and confidential. 
+ 
+Use-Case Scenarios 
+• Example Scenario 1: Doctor accessing a patient’s medical history. 
+ 
+• Example Scenario 2: Patient registering for a new EMR account. 
+ 
+• Example Scenario 3: A patient schedules an appointment from their dashboard. 
+ 
+• Example Scenario 4: Doctor creates a prescription 
+ 
+• Example Scenario 5: Patient views prescription history 
+ 
+• Example Scenario 6: Patient updates contact information 
+ 
+• Example Scenario 7: Patient views test results 
+ 
+• Example Scenario 8: Patient views billing and insurance information 
+ 
+• Example Scenario 9: Doctor orders a lab test 
+ 
+• Example Scenario 10: Doctor or nurse views patient medical history 
+
+
+--- PAGE 15 ---
+   
+ 
+  14 
+ 
+Graphical User Interface (GUI) Requirements 
+• Login page: 
+ 
+ 
+Figure 4.7.1 Login Page 
+ 
+Figure 4.7.1 shows the login page with fields such as the username, password, 
+verification code, remember me button, login button, create account button, as well as a 
+forgot password button. 
+ 
+ 
+Figure 4.7.2 Create user account page 
+ 
+Figure 4.7.2 shows the create user account page where the user can create an account by 
+entering in their desired username, password, email, first name, last name, and role. 
+ 
+ 
+ 
+
+
+
+--- PAGE 16 ---
+   
+ 
+  15 
+ 
+ 
+Figure 4.7.3 Password Reset Page 
+ 
+Figure 4.7.3 shows the password reset page where users can reset their password if they 
+were to forgot their password. 
+ 
+• Dashboard for doctors and administrators: 
+ 
+Figure 4.7.4 Doctor Dashboard 
+ 
+Figure 4.7.4 shows the dashboard for doctors. The doctors can use the navigation links to 
+open different interfaces to search for patients, to see medical history, to see test results, 
+to secure share records for patients, as well as to manage appointments. The doctors can 
+see notifications and alerts. Also, these notifications will appear in different colors 
+depending on the severity of the situation.  
+
+
+
+--- PAGE 17 ---
+   
+ 
+  16 
+ 
+ 
+ 
+Figure 4.7.5 Patient Window 
+ 
+Figure 4.7.5 shows the patient window when the doctor clicks on the “Patient Search” 
+button from Figure 4.7.4. The doctor can type in the patient’s name, date of birth, and 
+patientID to find the patient. 
+ 
+ 
+Figure 4.7.6 Admin Dashboard 
+ 
+Figure 4.7.6 shows the admin dashboard which includes access to user account creation, 
+role assignment, system logs, and reporting tools. Administrators are also able to view 
+system‑wide statistics such as daily login counts, appointment volume, and audit log 
+summaries. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+--- PAGE 18 ---
+   
+ 
+  17 
+ 
+• Patient profile page: 
+ 
+Figure 4.7.7 Patient Dashboard 
+ 
+Figure 4.7.7 shows the patient profile page which allows patients to view and update their 
+demographic information. The patients can also see any appointments, prescriptions, and 
+their insurance.  The patients can see any notifications or alerts about appointments, 
+invoices, or test results. 
+ 
+ 
+Figure 4.7.8 Patient Profile 
+ 
+Figure 4.7.8 shows the patient profile page which allows patients to view and update their 
+demographic information. Editable fields include address, phone number, and emergency 
+contact details, while non‑editable fields such as SSN, date of birth, and PatientID must 
+be clearly marked as read‑only. 
+ 
+ 
+ 
+ 
+
+
+
+--- PAGE 19 ---
+   
+ 
+  18 
+ 
+• Appointment scheduling page: 
+  
+ 
+Figure 4.7.9 Patient Appointment Schedule 
+ 
+Figure 4.7.9 shows the patient appointment schedule that includes a calendar view that 
+displays available dates and times, along with dropdown menus for selecting a doctor and 
+specifying the reason for the visit. Once a patient submits a request, the system must 
+display a confirmation message and update the patient’s dashboard. 
+ 
+ 
+Figure 4.7.10 Doctor Appointment Schedule 
+ 
+Figure 4.7.10 shows the doctor's appointment schedule which includes a corresponding 
+interface that allows them to approve, reschedule, or cancel appointment requests. The 
+scheduling interface must prevent double‑booking by checking the doctor’s availability 
+before confirming an appointment. 
+ 
+ 
+ 
+ 
+ 
+
+
+
+--- PAGE 20 ---
+   
+ 
+  19 
+ 
+• Prescription Management Interface: 
+ 
+Figure 4.7.11 Prescription Management page 
+ 
+Figure 4.7.11 shows the prescription management page which allows doctors to create, 
+update, and discontinue prescriptions. The interface also includes fields for medication 
+name, dosage, frequency, and duration, along with a search tool for selecting the patient.  
+ 
+ 
+• Billing and Insurance Interface: 
+ 
+Figure 4.7.12 Billing and Insurance Page 
+ 
+Figure 4.7.12 shows the billing and insurance page which allows patients to view their 
+billing statements, payment history, and insurance details. The Billing records are 
+displayed in a table format with columns for date, amount, and payment status. Insurance 
+information is also shown to include provider name, policy number, and coverage details. 
+The interface also allows patients to download billing statements or insurance summaries 
+for personal records or reimbursement purposes.  
+ 
+
+
+
+--- PAGE 21 ---
+   
+ 
+  20 
+ 
+• Access Log and Administrative Tools: 
+ 
+Figure 4.7.13 Admin Dashboard (Access Log Portion) Page 
+Figure 4.7.13 shows the admin dashboard which the admin can click on the “Access 
+Logs” to get to the access log page. 
+ 
+Figure 4.7.14 Access Log Page 
+Figure 4.7.14 shows an interface that displays system access logs, including login events, record 
+views, and modification actions. The interface also allows filtering by date, user, patient, or 
+action type to facilitate auditing and compliance reviews.  
+ 
+System Requirements 
+• Hardware Requirements: 
+o Minimum server specifications 
+
+
+
+--- PAGE 22 ---
+   
+ 
+  21 
+ 
+- Intel Core i5 4 cores  
+- RAM: 16 GB DDR4 
+- STORAGE:  250 GB SSD 
+- Network: 1 Gbps Connection 
+- Backup Storage: External Hard Drive 2x database size 
+o End-user devices 
+- Intel Core i5 4 cores  
+- RAM: 8 GB DDR4 
+- STORAGE:  128 GB of Free space 
+- Monitor: 1080 
+- Network: Stable Internet Connection 
+- Backup Storage: External Hard Drive 2x database size 
+ 
+• Software requirements: 
+o Operating systems 
+- Server OS: Windows Server 
+- Client OS: Windows 10/11 
+o Database management system 
+- MySQL 
+- Supported – primary/foreign keys, role permissions, backups 
+o Development frameworks 
+- Backend – Java 
+- Frontend – HTML/CSS/JS 
+- API – Rest for mobile  
+• Compliance Requirements: 
+o Compliance with: 
+- System must comply with HIPAA Privacy and security expectations for 
+protected health information 
+-  System must enforce role-based access control and least privilege. 
+- System must maintain audit logs for login record edits and other changes 
+- System must use 2FA for secure credential storage 
+- (Local and State rules based on location) 
+
+
+--- PAGE 23 ---
+   
+ 
+  22 
+ 
+Conceptual Design 
+Entity-Relationship Diagram (ERD) 
+Figure 5.1 Entity Relation Diagram of the EMR System 
+Figure 5.1 displays the ERD which provides a high-level design of the Electronic Medical 
+Record System by showing the Entities, relationships, and attributes and how they work together 
+in this system. 
+The ERD for the EMR system includes the following entities: User, Patient, Doctor, Nurse, 
+Admin, Insurance, Access_Log, Account_Information, Billing, Medical_History, Prescription, 
+Appointment, Test_Result. These entities represent the major components of the EMR system 
+and reflect the real-world objects and processes involved in patient care, clinical documentation, 
+and administrative management. Each entity contains attributes that describe its properties, and 
+relationships that define how entities interact with one another. 
+The primary key is tough to see on that screenshot as it’s hard to get a good image of something 
+that large, and to compress something like that into a smaller document. Therefore, the primary 
+
+
+
+--- PAGE 24 ---
+   
+ 
+  23 
+ 
+keys will be listed for each entity so that there is no confusion on what the unique identifier is for 
+each entity.  
+• Primary key for User is UserID 
+• Primary key for Access_Log is LogID 
+• Primary key for Insurance is InsuranceID 
+• Primary key for Account_Information is AccountID 
+• Primary key for Patient is PatientID 
+• Primary key for Admin is AdminID 
+• Primary key for Medical_History is MedicalHistoryID 
+• Primary key for Nurse is NurseID 
+• Primary key for Doctor is DocotrID 
+• Primary key for Prescription is PrescriptionID 
+• Primary key for Appointment is AppointmentID 
+• Primary key for Test_Result is ResultID 
+• Primary key for Billing is BillingID 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+--- PAGE 25 ---
+   
+ 
+  24 
+ 
+Appendix 
+• RAM – Random Access Memory 
+o A type of computer memory used to store data temporarily for fast access while 
+programs are running. 
+ 
+• EMR – Electronic Medical Record 
+o A digital version of a patient’s medical chart used within a single healthcare 
+organization.  
+ 
+• EMRKS – Electronic Medical Record Keeping System  
+o A broader system that manages, stores, and retrieves electronic medical records 
+and related clinical data. 
+ 
+• ERD – Entity Relationship Diagram  
+o A visual model that represents entities in a system and the relationships between 
+them as well as attributes for each entity. 
+ 
+• GUI – Graphical User Interface  
+o A visual interface that allows users to interact with software through buttons, 
+menus, and graphical elements. 
+ 
+• HIPAA – Health Insurance Portability and Accountability Act  
+o A U.S. law that sets standards for protecting sensitive patient health information. 
+ 
+• Java  
+o A high-level programming language commonly used for building applications 
+across platforms. 
+ 
+ 
+
+
+--- PAGE 26 ---
+   
+ 
+  25 
+ 
+• HTML – Hypertext Markup Language 
+o The standard language for creating and structuring web pages. 
+ 
+• CSS – Cascading Style Sheets 
+o A language used to style and format the appearance of web pages 
+ 
+• JS - JavaScript 
+o A programming language used to add interactivity and dynamic behavior to 
+websites 
+ 
+• API – Application Programming Interface 
+o A set of rules that allows different software systems to communicate and 
+exchange data. 
+ 
+• RBAC – Role-Based Access Control  
+o A security model where system permissions are granted based on a user’s 
+assigned role 
+ 
+• SSN – Social Security Number  
+o  A unique nine-digit identification number issued to U.S. citizens for identification 
+purposes 
+ 
+• MySQL 
+o A relational database management system used to store and manage structured 
+data 
+ 
+ 
+ 
+ 
+
+
+--- PAGE 27 ---
+   
+ 
+  26 
+ 
+References  
+ 
+Elmasri, Ramez, and Shamkant B. Navathe. Fundamentals of Database Systems. 7th ed., 
+Pearson/Benjamin Cummings, 2016. 
+United States Department of Health and Human Services. “Summary of the HIPAA Security 
+Rule. ” HHS.gov, 2013. 
+Ferraiolo, David F ., D. Richard Kuhn, and Ramaswamy Chandramouli. Role-Based Access 
+Control. Artech House, 2007. 

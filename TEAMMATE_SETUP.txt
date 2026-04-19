@@ -1,0 +1,77 @@
+EMR Project - Teammate Setup (Windows + MySQL Workbench)
+
+Repo folders:
+- emr-backend/  (Spring Boot API)
+- emr-frontend/ (React UI)
+- db/           (schema + seed deliverables)
+
+Prereqs to install:
+- Java JDK 17+
+- Node.js 18+ (npm included)
+- MySQL Server 8.x
+- MySQL Workbench
+
+Step 1) Create DB + App User (MySQL Workbench)
+1. Open MySQL Workbench and connect to your local MySQL server.
+2. Open a new SQL tab and run:
+
+   CREATE DATABASE IF NOT EXISTS emr_db;
+
+   If you previously ran an older schema, reset it:
+
+   DROP DATABASE emr_db;
+   CREATE DATABASE emr_db;
+
+3. Create an app user (recommended) and set a password you will use below:
+
+   CREATE USER IF NOT EXISTS 'emr_user'@'localhost' IDENTIFIED BY 'EmrPass123!';
+   GRANT ALL PRIVILEGES ON emr_db.* TO 'emr_user'@'localhost';
+   FLUSH PRIVILEGES;
+
+Step 2) Run Backend (PowerShell)
+1. Open PowerShell.
+2. Go to the backend folder:
+   cd "C:\PATH\TO\455 Project\emr-backend"
+
+3. Set DB env vars (use the same password you created in Workbench):
+   $env:DB_USER="emr_user"
+   $env:DB_PASSWORD="EmrPass123!"
+   $env:DB_URL="jdbc:mysql://localhost:3306/emr_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+
+4. Run:
+   .\mvnw.cmd spring-boot:run
+
+Expected:
+- Backend starts on http://localhost:8080
+- It auto-creates tables + seeds demo data on startup.
+
+Step 3) Run Frontend (PowerShell)
+1. Open a NEW PowerShell window.
+2. Go to the frontend folder:
+   cd "C:\PATH\TO\455 Project\emr-frontend"
+
+3. Install deps and start dev server:
+   npm.cmd install
+   npm.cmd run dev
+
+Expected:
+- Frontend starts on http://localhost:5173
+
+Demo logins (password: Password123!)
+- Admin:   admin1  (or admin1@emr.local)
+- Doctor:  doctor1 (or doctor1@emr.local)
+- Nurse:   nurse1  (or nurse1@emr.local)
+- LabTech: labtech1 (or labtech1@emr.local)
+- Patient: patient1 (or patient1@emr.local)
+
+2FA (optional)
+- Admin can enable/disable 2FA on the User Management page.
+- When enabled, the page shows a TOTP secret + otpauth URI (add it to Google Authenticator / Authy).
+- Login will then prompt for a 6-digit 2FA code.
+
+Common errors:
+- PowerShell says npm.ps1 blocked: use npm.cmd (commands above).
+- Backend "Access denied for user": your DB_USER/DB_PASSWORD doesn't match MySQL; fix env vars or Workbench user.
+- Port in use: stop the app using 8080/5173, or change ports in:
+  - emr-backend/src/main/resources/application.properties (server.port)
+  - emr-frontend/vite.config.ts (server.port)
