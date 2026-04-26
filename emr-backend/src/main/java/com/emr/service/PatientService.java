@@ -75,7 +75,7 @@ public class PatientService {
   }
 
   public PatientProfileResponse getById(Long patientId) {
-    Patient patient = patientRepository.findById(patientId)
+    Patient patient = patientRepository.findById(patientId != null ? patientId : 0L)
         .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Patient not found"));
     accessLogService.log("READ", "Patient", String.valueOf(patientId));
     return toProfile(patient);
@@ -84,8 +84,25 @@ public class PatientService {
   public List<PatientSearchResponse> search(String q, LocalDate dob, Long patientId) {
     String logKey = (patientId != null ? "id=" + patientId : "") + (dob != null ? " dob=" + dob : "") + (q != null ? " q=" + q : "");
     accessLogService.log("SEARCH", "Patient", logKey.trim());
-    String qq = (q == null || q.isBlank()) ? null : q.trim();
-    return patientRepository.searchAdvanced(qq, dob, patientId).stream()
+
+    String qq = (q == null || q.isBlank()) ? null : q.trim().toLowerCase();
+
+    return patientRepository.findAll().stream()
+        .filter(p -> patientId == null || p.getId().equals(patientId))
+        .filter(p -> dob == null || dob.equals(p.getDateOfBirth()))
+        .filter(p -> {
+          if (qq == null) return true;
+          String[] words = qq.split("\\s+");
+          String fullName = (p.getFirstName() + " " + p.getLastName()).toLowerCase();
+          String email = p.getUser().getEmail() != null ? p.getUser().getEmail().toLowerCase() : "";
+          String username = p.getUser().getUsername() != null ? p.getUser().getUsername().toLowerCase() : "";
+          for (String word : words) {
+            boolean matchesAny = fullName.contains(word) || email.contains(word) || username.contains(word);
+            if (!matchesAny) return false;
+          }
+          return true;
+        })
+        .sorted(java.util.Comparator.comparing(Patient::getLastName).thenComparing(Patient::getFirstName))
         .map(p -> new PatientSearchResponse(p.getId(), p.getFirstName(), p.getLastName(), p.getDateOfBirth(), p.getUser().getEmail()))
         .toList();
   }
