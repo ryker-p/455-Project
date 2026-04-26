@@ -33,13 +33,13 @@ public class PatientsController {
   }
 
   @GetMapping("/{patientId}")
-  @PreAuthorize("hasAnyRole('DOCTOR','NURSE','ADMIN')")
+  @PreAuthorize("hasAnyRole('DOCTOR','NURSE','ADMIN','LABTECH')")
   public PatientProfileResponse get(@PathVariable Long patientId) {
     return patientService.getById(patientId);
   }
 
   @GetMapping("/search")
-  @PreAuthorize("hasAnyRole('DOCTOR','NURSE','ADMIN')")
+  @PreAuthorize("hasAnyRole('DOCTOR','NURSE','ADMIN','LABTECH')")
   public List<PatientSearchResponse> search(
       @RequestParam(required = false) String q,
       @RequestParam(required = false) LocalDate dob,

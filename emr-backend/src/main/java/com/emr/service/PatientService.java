@@ -75,12 +75,13 @@ public class PatientService {
   }
 
   public PatientProfileResponse getById(Long patientId) {
-    Patient patient = patientRepository.findById(patientId != null ? patientId : 0L)
+    Patient patient = patientRepository.findById(patientId)
         .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Patient not found"));
     accessLogService.log("READ", "Patient", String.valueOf(patientId));
     return toProfile(patient);
   }
 
+  @Transactional
   public List<PatientSearchResponse> search(String q, LocalDate dob, Long patientId) {
     String logKey = (patientId != null ? "id=" + patientId : "") + (dob != null ? " dob=" + dob : "") + (q != null ? " q=" + q : "");
     accessLogService.log("SEARCH", "Patient", logKey.trim());
@@ -94,8 +95,8 @@ public class PatientService {
           if (qq == null) return true;
           String[] words = qq.split("\\s+");
           String fullName = (p.getFirstName() + " " + p.getLastName()).toLowerCase();
-          String email = p.getUser().getEmail() != null ? p.getUser().getEmail().toLowerCase() : "";
-          String username = p.getUser().getUsername() != null ? p.getUser().getUsername().toLowerCase() : "";
+          String email = p.getUser() != null && p.getUser().getEmail() != null ? p.getUser().getEmail().toLowerCase() : "";
+          String username = p.getUser() != null && p.getUser().getUsername() != null ? p.getUser().getUsername().toLowerCase() : "";
           for (String word : words) {
             boolean matchesAny = fullName.contains(word) || email.contains(word) || username.contains(word);
             if (!matchesAny) return false;
