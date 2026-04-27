@@ -25,7 +25,7 @@ public class MedicalHistoryController {
   }
 
   @GetMapping("/patient/{patientId}")
-  @PreAuthorize("hasAnyRole('DOCTOR','NURSE','ADMIN')")
+  @PreAuthorize("hasAnyRole('DOCTOR','NURSE','ADMIN','LABTECH')")
   public List<MedicalHistoryResponse> forPatient(@PathVariable Long patientId) {
     return medicalHistoryService.listForPatient(patientId);
   }

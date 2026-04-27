@@ -7,4 +7,10 @@
 **/.env
 
 emr-backend/target/
+emr-backend/.mvn/repository/
+emr-frontend/*.tsbuildinfo
+package-lock.json
 
+# Local copies of class deliverables (don't commit)
+EMR-*Deliverable*.pdf
+EMR-*Deliverable*.txt

@@ -10,4 +10,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
   List<Appointment> findByDoctorUserIdOrderByScheduledAtDesc(Long userId);
 
   boolean existsByDoctorIdAndScheduledAtAndStatusNotIn(Long doctorId, java.time.Instant scheduledAt, java.util.List<String> statuses);
+  boolean existsByDoctorIdAndScheduledAtAndStatusNotInAndIdNot(
+      Long doctorId,
+      java.time.Instant scheduledAt,
+      java.util.List<String> statuses,
+      Long appointmentId
+  );
 }

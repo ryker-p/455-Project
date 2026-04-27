@@ -99,7 +99,12 @@ public class AppointmentService {
         .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Appointment not found"));
 
     if (request.scheduledAt() != null) {
-      if (appointmentRepository.existsByDoctorIdAndScheduledAtAndStatusNotIn(appt.getDoctor().getId(), request.scheduledAt(), BLOCKING_STATUSES)) {
+      if (appointmentRepository.existsByDoctorIdAndScheduledAtAndStatusNotInAndIdNot(
+          appt.getDoctor().getId(),
+          request.scheduledAt(),
+          BLOCKING_STATUSES,
+          appointmentId
+      )) {
         throw new ApiException(HttpStatus.CONFLICT, "Doctor is already booked at that time");
       }
       appt.setScheduledAt(request.scheduledAt());

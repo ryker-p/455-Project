@@ -45,6 +45,7 @@ export default function PrescriptionManagementPage() {
   }, [token, me?.role, patientId]);
 
   const canCreate = (me?.role as Role) === "DOCTOR";
+  const canUpdateStatus = me?.role === "DOCTOR" || me?.role === "ADMIN";
 
   const create = async (e: FormEvent) => {
     e.preventDefault();
@@ -128,7 +129,7 @@ export default function PrescriptionManagementPage() {
               <th>Status</th>
               <th>Start</th>
               <th>End</th>
-              {me?.role !== "PATIENT" && <th></th>}
+              {canUpdateStatus && <th></th>}
             </tr>
           </thead>
           <tbody>
@@ -141,7 +142,7 @@ export default function PrescriptionManagementPage() {
                 </td>
                 <td>{r.startDate ?? "-"}</td>
                 <td>{r.endDate ?? "-"}</td>
-                {me?.role !== "PATIENT" && (
+                {canUpdateStatus && (
                   <td>
                     <Select
                       label=""
@@ -160,7 +161,7 @@ export default function PrescriptionManagementPage() {
             ))}
             {rows.length === 0 && (
               <tr>
-                <td colSpan={me?.role === "PATIENT" ? 5 : 6} className="muted">
+                <td colSpan={canUpdateStatus ? 6 : 5} className="muted">
                   {me?.role === "PATIENT" ? "No prescriptions found." : "Enter a patient ID to load prescriptions."}
                 </td>
               </tr>
@@ -171,4 +172,3 @@ export default function PrescriptionManagementPage() {
     </Layout>
   );
 }
-

@@ -8,7 +8,7 @@ import Input from "../components/Input";
 import Select from "../components/Select";
 import Button from "../components/Button";
 
-const ROLES: Role[] = ["PATIENT", "DOCTOR", "NURSE", "ADMIN"];
+const ROLES: Role[] = ["PATIENT", "DOCTOR", "NURSE", "LABTECH", "ADMIN"];
 
 export default function RoleAssignmentPage() {
   const { token } = useAuth();

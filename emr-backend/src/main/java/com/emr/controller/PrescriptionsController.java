@@ -38,9 +38,8 @@ public class PrescriptionsController {
   }
 
   @PutMapping("/{prescriptionId}/status")
-  @PreAuthorize("hasAnyRole('DOCTOR','NURSE','ADMIN')")
+  @PreAuthorize("hasAnyRole('DOCTOR','ADMIN')")
   public PrescriptionResponse updateStatus(@PathVariable Long prescriptionId, @Valid @RequestBody PrescriptionStatusUpdateRequest request) {
     return prescriptionService.updateStatus(prescriptionId, request);
   }
 }
-

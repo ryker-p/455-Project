@@ -1,6 +1,6 @@
 import { apiFetch } from "./http";
 
-export type Role = "PATIENT" | "DOCTOR" | "NURSE" | "ADMIN";
+export type Role = "PATIENT" | "DOCTOR" | "NURSE" | "LABTECH" | "ADMIN";
 
 export type MeResponse = {
   userId: number;
