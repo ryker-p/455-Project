@@ -16,6 +16,7 @@ export default function PrescriptionManagementPage() {
   const [toast, setToast] = useState<string | null>(null);
   const [rows, setRows] = useState<Prescription[]>([]);
   const [patientId, setPatientId] = useState<string>("");
+  const [requestedDrug, setRequestedDrug] = useState<string>("");
   const [form, setForm] = useState({
     medicationName: "",
     dosage: "",
@@ -46,6 +47,7 @@ export default function PrescriptionManagementPage() {
 
   const canCreate = (me?.role as Role) === "DOCTOR";
   const canUpdateStatus = me?.role === "DOCTOR" || me?.role === "ADMIN";
+  const canRequestPrescription = me?.role === "PATIENT";
 
   const create = async (e: FormEvent) => {
     e.preventDefault();
@@ -78,6 +80,12 @@ export default function PrescriptionManagementPage() {
       const msg = err instanceof ApiError ? err.message : "Update failed";
       setToast(msg);
     }
+  };
+
+  const requestPrescription = () => {
+    if (!requestedDrug.trim()) return;
+    setToast(`Prescription request for ${requestedDrug.trim()} was sent.`);
+    setRequestedDrug("");
   };
 
   return (
@@ -117,6 +125,23 @@ export default function PrescriptionManagementPage() {
             Create
           </Button>
         </form>
+      )}
+
+      {canRequestPrescription && (
+        <div className="card">
+          <h2 className="sectionTitle">Request prescription</h2>
+          <div className="row">
+            <Input
+              label="Drug name"
+              value={requestedDrug}
+              onChange={(e) => setRequestedDrug(e.target.value)}
+              placeholder="Request prescription for this drug"
+            />
+            <Button variant="secondary" onClick={requestPrescription} disabled={!requestedDrug.trim()}>
+              Send request
+            </Button>
+          </div>
+        </div>
       )}
 
       <div className="card">
