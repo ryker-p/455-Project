@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import Toast from "../components/Toast";
 import { api, Appointment } from "../lib/api";
 import { ApiError } from "../lib/http";
 import { useAuth } from "../state/AuthContext";
+import Input from "../components/Input";
+import Button from "../components/Button";
 
 export default function DoctorDashboardPage() {
   const { token } = useAuth();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [toast, setToast] = useState<string | null>(null);
+  const [shareForm, setShareForm] = useState({ patientId: "", hospitalName: "" });
 
   useEffect(() => {
     (async () => {
@@ -21,6 +24,12 @@ export default function DoctorDashboardPage() {
       }
     })();
   }, [token]);
+
+  const handleShare = (e: FormEvent) => {
+    e.preventDefault();
+    setToast("Medical records shared successfully!");
+    setShareForm({ patientId: "", hospitalName: "" });
+  };
 
   return (
     <Layout title="Doctor Dashboard">
@@ -57,7 +66,30 @@ export default function DoctorDashboardPage() {
           </tbody>
         </table>
       </section>
+
+      <section className="card">
+        <h2 className="sectionTitle">Share Medical Records</h2>
+        <form onSubmit={handleShare}>
+          <Input
+            label="Patient ID"
+            type="text"
+            value={shareForm.patientId}
+            onChange={(e) => setShareForm({ ...shareForm, patientId: e.target.value })}
+          />
+          <Input
+            label="Hospital Name"
+            type="text"
+            value={shareForm.hospitalName}
+            onChange={(e) => setShareForm({ ...shareForm, hospitalName: e.target.value })}
+          />
+          <Button
+            type="submit"
+            disabled={!shareForm.patientId || !shareForm.hospitalName}
+          >
+            Share Medical Records
+          </Button>
+        </form>
+      </section>
     </Layout>
   );
 }
-

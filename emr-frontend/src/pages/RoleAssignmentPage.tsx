@@ -92,7 +92,7 @@ export default function RoleAssignmentPage() {
         </div>
         <div className="grid2">
           <Input label="Email" value={createForm.email} onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })} />
-          <Input label="Temp password" type="password" value={createForm.password} onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })} />
+          <Input label="Temp password (min 8 characters)" type="password" value={createForm.password} onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })} />
         </div>
         <Select label="Role" value={createForm.role} onChange={(e) => setCreateForm({ ...createForm, role: e.target.value as Role })}>
           {ROLES.map((r) => (
@@ -101,9 +101,12 @@ export default function RoleAssignmentPage() {
             </option>
           ))}
         </Select>
+        {createForm.password.length > 0 && createForm.password.length < 8 && (
+          <p style={{ color: "red", fontSize: "0.85rem" }}>Password must be at least 8 characters.</p>
+        )}
         <Button
           type="submit"
-          disabled={!createForm.username || !createForm.email || !createForm.password || !createForm.firstName || !createForm.lastName}
+          disabled={!createForm.username || !createForm.email || !createForm.password || createForm.password.length < 8 || !createForm.firstName || !createForm.lastName}
         >
           Create user
         </Button>
@@ -131,7 +134,7 @@ export default function RoleAssignmentPage() {
               <th>Username</th>
               <th>Role</th>
               <th>2FA</th>
-              <th>Enabled</th>
+              <th>2FA Status</th>
             </tr>
           </thead>
           <tbody>
@@ -157,7 +160,7 @@ export default function RoleAssignmentPage() {
                     {u.twoFactorEnabled ? "Disable" : "Enable"}
                   </Button>
                 </td>
-                <td>{u.enabled ? "Yes" : "No"}</td>
+                <td>{u.twoFactorEnabled ? "Yes" : "No"}</td>
               </tr>
             ))}
             {rows.length === 0 && (
