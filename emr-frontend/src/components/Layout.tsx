@@ -31,7 +31,6 @@ function navFor(role: string): Item[] {
       { to: "/nurse/patients", label: "Patient Search" },
       { to: "/nurse/appointments", label: "Appointments" },
       { to: "/nurse/prescriptions", label: "Prescriptions" },
-      { to: "/nurse/billing", label: "Billing & Insurance" },
       { to: "/nurse/history", label: "History / Tests" }
     ];
   }
@@ -45,6 +44,7 @@ function navFor(role: string): Item[] {
   return [
     { to: "/admin", label: "Dashboard" },
     { to: "/admin/patients", label: "Patient Search" },
+    { to: "/admin/billing", label: "Billing & Insurance" },
     { to: "/admin/access-logs", label: "Access Logs" },
     { to: "/admin/reports", label: "Reports" },
     { to: "/admin/users", label: "User Management" }

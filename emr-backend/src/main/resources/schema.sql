@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS `Patient` (
   `ssn` CHAR(11) NULL UNIQUE,
   `date_of_birth` DATE NULL,
   `sex` VARCHAR(24) NULL,
+  `phone` VARCHAR(20) NULL,
+  `address` VARCHAR(255) NULL,
   CONSTRAINT `fk_patient_user` FOREIGN KEY (`user_id`) REFERENCES `User` (`id`)
 );
 

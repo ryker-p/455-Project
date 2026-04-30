@@ -7,10 +7,12 @@ import com.emr.dto.MeResponse;
 import com.emr.dto.ResetPasswordRequest;
 import com.emr.exception.ApiException;
 import com.emr.model.AccessLog;
+import com.emr.model.Insurance;
 import com.emr.model.Patient;
 import com.emr.model.Role;
 import com.emr.model.User;
 import com.emr.repository.AccessLogRepository;
+import com.emr.repository.InsuranceRepository;
 import com.emr.repository.PatientRepository;
 import com.emr.repository.UserRepository;
 import com.emr.security.JwtService;
@@ -27,6 +29,7 @@ import java.time.Instant;
 public class AuthService {
   private final UserRepository userRepository;
   private final PatientRepository patientRepository;
+  private final InsuranceRepository insuranceRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final UserService userService;
@@ -40,6 +43,7 @@ public class AuthService {
   public AuthService(
       UserRepository userRepository,
       PatientRepository patientRepository,
+      InsuranceRepository insuranceRepository,
       PasswordEncoder passwordEncoder,
       JwtService jwtService,
       UserService userService,
@@ -49,6 +53,7 @@ public class AuthService {
   ) {
     this.userRepository = userRepository;
     this.patientRepository = patientRepository;
+    this.insuranceRepository = insuranceRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtService = jwtService;
     this.userService = userService;
@@ -127,7 +132,26 @@ public class AuthService {
     patient.setUser(user);
     patient.setFirstName(request.firstName().trim());
     patient.setLastName(request.lastName().trim());
-    patientRepository.save(patient);
+    if (request.dateOfBirth() != null) patient.setDateOfBirth(request.dateOfBirth());
+    if (request.ssn() != null && !request.ssn().isBlank()) patient.setSsn(request.ssn().trim());
+    if (request.phone() != null && !request.phone().isBlank()) patient.setPhone(request.phone().trim());
+    if (request.address() != null && !request.address().isBlank()) patient.setAddress(request.address().trim());
+    if (request.sex() != null && !request.sex().isBlank()) patient.setSex(request.sex().trim());
+    patient = patientRepository.save(patient);
+
+    if (request.insuranceProvider() != null && !request.insuranceProvider().isBlank()
+        && request.policyNumber() != null && !request.policyNumber().isBlank()
+        && request.effectiveDate() != null) {
+      Insurance insurance = new Insurance();
+      insurance.setPatient(patient);
+      insurance.setProviderName(request.insuranceProvider().trim());
+      insurance.setPolicyNumber(request.policyNumber().trim());
+      if (request.groupNumber() != null && !request.groupNumber().isBlank()) {
+        insurance.setGroupNumber(request.groupNumber().trim());
+      }
+      insurance.setEffectiveDate(request.effectiveDate());
+      insuranceRepository.save(insurance);
+    }
 
     String token = jwtService.generateToken(user.getUsername(), user.getRole());
     MeResponse me = userService.meFor(user);

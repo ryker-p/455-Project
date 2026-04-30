@@ -25,10 +25,13 @@ export const api = {
         method: "POST",
         body: { identifier, password, twoFactorCode: twoFactorCode ?? null }
       }),
-    register: (username: string, email: string, password: string, firstName: string, lastName: string) =>
+    register: (username: string, email: string, password: string, firstName: string, lastName: string,
+      dateOfBirth?: string, ssn?: string, phone?: string, address?: string, sex?: string,
+      insuranceProvider?: string, policyNumber?: string, groupNumber?: string, effectiveDate?: string) =>
       apiFetch<AuthResponse>("/auth/register", {
         method: "POST",
-        body: { username, email, password, firstName, lastName }
+        body: { username, email, password, firstName, lastName, dateOfBirth, ssn, phone, address, sex,
+          insuranceProvider, policyNumber, groupNumber, effectiveDate }
       }),
     resetPassword: (email: string, newPassword: string) =>
       apiFetch<void>("/auth/reset-password", {

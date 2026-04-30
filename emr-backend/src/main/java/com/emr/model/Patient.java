@@ -30,55 +30,35 @@ public class Patient {
   @Column(name = "sex", length = 24)
   private String sex;
 
-  public Long getId() {
-    return id;
-  }
+  @Column(name = "phone", length = 20)
+  private String phone;
 
-  public User getUser() {
-    return user;
-  }
+  @Column(name = "address", length = 255)
+  private String address;
 
-  public void setUser(User user) {
-    this.user = user;
-  }
+  public Long getId() { return id; }
 
-  public String getFirstName() {
-    return firstName;
-  }
+  public User getUser() { return user; }
+  public void setUser(User user) { this.user = user; }
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
+  public String getFirstName() { return firstName; }
+  public void setFirstName(String firstName) { this.firstName = firstName; }
 
-  public String getLastName() {
-    return lastName;
-  }
+  public String getLastName() { return lastName; }
+  public void setLastName(String lastName) { this.lastName = lastName; }
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+  public String getSsn() { return ssn; }
+  public void setSsn(String ssn) { this.ssn = ssn; }
 
-  public String getSsn() {
-    return ssn;
-  }
+  public LocalDate getDateOfBirth() { return dateOfBirth; }
+  public void setDateOfBirth(LocalDate dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
-  public void setSsn(String ssn) {
-    this.ssn = ssn;
-  }
+  public String getSex() { return sex; }
+  public void setSex(String sex) { this.sex = sex; }
 
-  public LocalDate getDateOfBirth() {
-    return dateOfBirth;
-  }
+  public String getPhone() { return phone; }
+  public void setPhone(String phone) { this.phone = phone; }
 
-  public void setDateOfBirth(LocalDate dateOfBirth) {
-    this.dateOfBirth = dateOfBirth;
-  }
-
-  public String getSex() {
-    return sex;
-  }
-
-  public void setSex(String sex) {
-    this.sex = sex;
-  }
+  public String getAddress() { return address; }
+  public void setAddress(String address) { this.address = address; }
 }

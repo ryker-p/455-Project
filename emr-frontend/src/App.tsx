@@ -65,7 +65,6 @@ export default function App() {
           <Route path="patients" element={<PatientSearchPage />} />
           <Route path="appointments" element={<DoctorAppointmentManagementPage />} />
           <Route path="prescriptions" element={<PrescriptionManagementPage />} />
-          <Route path="billing" element={<BillingInsurancePage />} />
           <Route path="history" element={<MedicalHistoryPage />} />
         </Route>
 
@@ -78,6 +77,7 @@ export default function App() {
         <Route path="/admin" element={<RequireRole role="ADMIN" />}>
           <Route index element={<AdminDashboardPage />} />
           <Route path="patients" element={<PatientSearchPage />} />
+          <Route path="billing" element={<BillingInsurancePage />} />
           <Route path="access-logs" element={<AccessLogsPage />} />
           <Route path="reports" element={<ReportsPage />} />
           <Route path="users" element={<RoleAssignmentPage />} />
