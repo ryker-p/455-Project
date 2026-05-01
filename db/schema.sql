@@ -1,4 +1,4 @@
--- MySQL schema for EMR (matches required table names)
+
 
 CREATE TABLE IF NOT EXISTS `User` (
   `id` BIGINT PRIMARY KEY AUTO_INCREMENT,
