@@ -43,3 +43,61 @@ VALUES (1, 1, 1, 'Cetirizine', '10mg', 'Take 1 tablet by mouth daily as needed.'
 
 INSERT IGNORE INTO `Billing` (`id`, `patient_id`, `appointment_id`, `amount`, `status`, `due_date`, `description`)
 VALUES (1, 1, 1, 25.00, 'OPEN', DATE_ADD(CURDATE(), INTERVAL 30 DAY), 'Copay');
+
+SELECT a.id AS AppointmentID, a.scheduled_at, a.reason, a.status,
+       p.first_name AS PatientFirstName, p.last_name AS PatientLastName,
+       d.first_name AS DoctorFirstName, d.last_name AS DoctorLastName
+FROM `Appointment` a
+JOIN `Patient` p ON a.patient_id = p.id
+JOIN `Doctor` d ON a.doctor_id = d.id
+WHERE a.patient_id = 1
+ORDER BY a.scheduled_at DESC;
+
+
+UPDATE `Appointment`
+SET status = 'COMPLETED'
+WHERE id = 1;
+
+
+DELETE FROM `Appointment`
+WHERE id = 1
+AND status = 'CANCELLED';
+
+
+DELIMITER //
+
+CREATE PROCEDURE GetPatientAppointments(IN patient_id INT)
+BEGIN
+    SELECT a.id AS AppointmentID, a.scheduled_at, a.reason, a.status,
+           d.first_name AS DoctorFirstName, d.last_name AS DoctorLastName,
+           d.specialty
+    FROM `Appointment` a
+    JOIN `Doctor` d ON a.doctor_id = d.id
+    WHERE a.patient_id = patient_id
+    ORDER BY a.scheduled_at DESC;
+END //
+
+DELIMITER ;
+
+
+CALL GetPatientAppointments(1);
+
+
+DELIMITER //
+
+CREATE TRIGGER PreventDoctorDoubleBooking
+BEFORE INSERT ON `Appointment`
+FOR EACH ROW
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM `Appointment`
+        WHERE doctor_id = NEW.doctor_id
+          AND scheduled_at = NEW.scheduled_at
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'This doctor already has an appointment at the specified date and time.';
+    END IF;
+END //
+
+DELIMITER ;
