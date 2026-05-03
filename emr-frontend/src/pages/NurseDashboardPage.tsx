@@ -46,8 +46,8 @@ export default function NurseDashboardPage() {
       <div className="grid2">
         <div className="card">
           <h2 className="sectionTitle">Current workflow</h2>
-          <p className="muted">Use Patient Search to find the patient ID, then open Billing & Insurance or Medical History / Tests.</p>
-          <p className="muted">Nurses can review appointments, add test results, and manage billing records.</p>
+          <p className="muted">Use Patient Search to find the patient ID, or Medical History / Tests of that patient.</p>
+          <p className="muted">Nurses can review appointments and add test results.</p>
         </div>
 
         <div className="card">
