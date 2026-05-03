@@ -7,11 +7,13 @@ import com.emr.dto.MeResponse;
 import com.emr.dto.ResetPasswordRequest;
 import com.emr.exception.ApiException;
 import com.emr.model.AccessLog;
+import com.emr.model.AccountInfo;
 import com.emr.model.Insurance;
 import com.emr.model.Patient;
 import com.emr.model.Role;
 import com.emr.model.User;
 import com.emr.repository.AccessLogRepository;
+import com.emr.repository.AccountInfoRepository;
 import com.emr.repository.InsuranceRepository;
 import com.emr.repository.PatientRepository;
 import com.emr.repository.UserRepository;
@@ -30,6 +32,7 @@ public class AuthService {
   private final UserRepository userRepository;
   private final PatientRepository patientRepository;
   private final InsuranceRepository insuranceRepository;
+  private final AccountInfoRepository accountInfoRepository;
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final UserService userService;
@@ -44,6 +47,7 @@ public class AuthService {
       UserRepository userRepository,
       PatientRepository patientRepository,
       InsuranceRepository insuranceRepository,
+      AccountInfoRepository accountInfoRepository,
       PasswordEncoder passwordEncoder,
       JwtService jwtService,
       UserService userService,
@@ -54,6 +58,7 @@ public class AuthService {
     this.userRepository = userRepository;
     this.patientRepository = patientRepository;
     this.insuranceRepository = insuranceRepository;
+    this.accountInfoRepository = accountInfoRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtService = jwtService;
     this.userService = userService;
@@ -138,6 +143,16 @@ public class AuthService {
     if (request.address() != null && !request.address().isBlank()) patient.setAddress(request.address().trim());
     if (request.sex() != null && !request.sex().isBlank()) patient.setSex(request.sex().trim());
     patient = patientRepository.save(patient);
+
+    // Save phone and address to AccountInfo so they appear in the patient profile
+    if ((request.phone() != null && !request.phone().isBlank())
+        || (request.address() != null && !request.address().isBlank())) {
+      AccountInfo accountInfo = new AccountInfo();
+      accountInfo.setUser(user);
+      if (request.phone() != null && !request.phone().isBlank()) accountInfo.setPhone(request.phone().trim());
+      if (request.address() != null && !request.address().isBlank()) accountInfo.setAddressLine1(request.address().trim());
+      accountInfoRepository.save(accountInfo);
+    }
 
     if (request.insuranceProvider() != null && !request.insuranceProvider().isBlank()
         && request.policyNumber() != null && !request.policyNumber().isBlank()

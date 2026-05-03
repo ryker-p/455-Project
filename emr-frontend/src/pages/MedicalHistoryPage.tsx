@@ -31,12 +31,18 @@ export default function MedicalHistoryPage() {
         setHistory(h);
         setTests(t);
       } else if (hasValidPatientId) {
-        const [h, t] = await Promise.all([
-          api.medicalHistory.forPatient(token!, Number(normalizedPatientId)),
-          api.testResults.forPatient(token!, Number(normalizedPatientId))
-        ]);
-        setHistory(h);
-        setTests(t);
+        if (me?.role === "LABTECH") {
+          const t = await api.testResults.forPatient(token!, Number(normalizedPatientId));
+          setHistory([]);
+          setTests(t);
+        } else {
+          const [h, t] = await Promise.all([
+            api.medicalHistory.forPatient(token!, Number(normalizedPatientId)),
+            api.testResults.forPatient(token!, Number(normalizedPatientId))
+          ]);
+          setHistory(h);
+          setTests(t);
+        }
       } else {
         setHistory([]);
         setTests([]);
@@ -133,6 +139,7 @@ export default function MedicalHistoryPage() {
       )}
 
       <div className="grid2">
+        {me?.role !== "LABTECH" && (
         <div className="card">
           <h2 className="sectionTitle">History</h2>
           <table className="table">
@@ -161,6 +168,7 @@ export default function MedicalHistoryPage() {
             </tbody>
           </table>
         </div>
+        )}
 
         <div className="card">
           <h2 className="sectionTitle">Test results</h2>
