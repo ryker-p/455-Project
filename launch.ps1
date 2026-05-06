@@ -51,7 +51,7 @@ if (-not $SkipDocker) {
     Write-LaunchLog "Creating local MySQL database emr_db if needed..."
     $PreviousMysqlPassword = $env:MYSQL_PWD
     $env:MYSQL_PWD = $DbPassword
-    mysql -u $DbUser -e "CREATE DATABASE IF NOT EXISTS emr_db;"
+    mysql -u $DbUser --port=$DbPort -e "CREATE DATABASE IF NOT EXISTS emr_db;"
     $MysqlExitCode = $LASTEXITCODE
     $env:MYSQL_PWD = $PreviousMysqlPassword
 
