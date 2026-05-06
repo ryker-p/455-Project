@@ -40,6 +40,18 @@ if (-not $SkipDocker) {
     }
 } else {
     Write-LaunchLog "Skipping Docker. Backend will use local MySQL on localhost:3306."
+    Require-Command "mysql"
+
+    Write-LaunchLog "Creating local MySQL database emr_db if needed..."
+    $PreviousMysqlPassword = $env:MYSQL_PWD
+    $env:MYSQL_PWD = $DbPassword
+    mysql -u $DbUser -e "CREATE DATABASE IF NOT EXISTS emr_db;"
+    $MysqlExitCode = $LASTEXITCODE
+    $env:MYSQL_PWD = $PreviousMysqlPassword
+
+    if ($MysqlExitCode -ne 0) {
+        throw "Could not create or access emr_db with the provided MySQL credentials. Check -DbUser and -DbPassword."
+    }
 }
 
 Write-LaunchLog "Starting Spring Boot backend on http://localhost:8080 ..."
