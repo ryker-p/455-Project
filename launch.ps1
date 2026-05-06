@@ -2,10 +2,16 @@ param(
     [switch]$SkipDocker,
     [string]$DbUser = "root",
     [string]$DbPassword = "password",
-    [string]$DbUrl = "jdbc:mysql://localhost:3306/emr_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+    [int]$DbPort = 3306,
+    [string]$DbUrl = ""
 )
 
 $ErrorActionPreference = "Stop"
+
+# Build DbUrl if not provided
+if ([string]::IsNullOrEmpty($DbUrl)) {
+    $DbUrl = "jdbc:mysql://localhost:$DbPort/emr_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+}
 
 $RootDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $BackendDir = Join-Path $RootDir "emr-backend"
@@ -39,7 +45,7 @@ if (-not $SkipDocker) {
         throw "Docker Compose failed. Open Docker Desktop, wait until it is running, then run .\launch.ps1 again. If you want to use local MySQL instead, run .\launch.ps1 -SkipDocker -DbPassword your_mysql_password"
     }
 } else {
-    Write-LaunchLog "Skipping Docker. Backend will use local MySQL on localhost:3306."
+    Write-LaunchLog "Skipping Docker. Backend will use local MySQL on localhost:$DbPort."
     Require-Command "mysql"
 
     Write-LaunchLog "Creating local MySQL database emr_db if needed..."
