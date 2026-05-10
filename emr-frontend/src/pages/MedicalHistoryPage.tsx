@@ -122,7 +122,7 @@ export default function MedicalHistoryPage() {
           ) : (
             <div className="card">
               <h2 className="sectionTitle">Medical history</h2>
-              <p className="muted">Only Doctors/Admin can add diagnoses/history entries.</p>
+              <p className="muted">Only Doctors/Nurses can add diagnoses/history entries.</p>
             </div>
           )}
           <form className="card" onSubmit={addTest}>
